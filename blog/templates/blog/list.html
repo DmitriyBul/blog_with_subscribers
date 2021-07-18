@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+
+{% block title %}
+{% endblock %}
+{% block content %}
+
+{% for post in posts %}
+<h1>{{ post.title }}</h1>
+<a href="{% url 'blog:add_user' post.user%}">Subscribe</a>
+<a href="{% url 'blog:delete_user' post.user%}">Unsubsсribe</a>
+{{ post.text }}
+<br>
+{{ post.date }}
+{% endfor %}
+
+{% endblock %}

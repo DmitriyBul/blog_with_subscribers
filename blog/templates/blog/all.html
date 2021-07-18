@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+
+{% block title %}
+{% endblock %}
+{% block content %}
+{% for post in posts %}
+<h1>{{ post.title }}</h1>
+<a href="{% url 'blog:post_list' username=post.user.username %}">{{ post.user }}</a>
+
+<br>
+{{ post.text }}
+<br>
+{{ post.date }}
+
+{% endfor %}
+{% endblock %}

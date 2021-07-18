@@ -1,0 +1,15 @@
+{% extends "blog/base.html" %}
+
+{% block title %}
+{% endblock %}
+{% block content %}
+
+{% for post in posts %}
+<h1>{{ post.title }}</h1>
+{{ post.text }}
+<br>
+<a href="{% url 'blog:add_user' post.user%}">{{ post.user }}</a>
+{{ post.date }}
+{% endfor %}
+
+{% endblock %}

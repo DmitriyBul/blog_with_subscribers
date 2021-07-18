@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}Nekidaem{% endblock %}</title>
+</head>
+<body>
+<div id="header">
+    {% if request.user.is_authenticated %}
+    <ul class="menu">
+
+    </ul>
+    {% endif %}
+    <span class="user">
+{% if request.user.is_authenticated %}
+    Hello {{ request.user }},
+
+{% else %}
+
+{% endif %}
+<a href="{% url 'blog:home' %}">My blog</a>
+<a href="{% url 'blog:all_list' %}">Latest</a>
+<a href="{% url 'blog:news_list' %}">News</a>
+
+</span>
+</div>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
