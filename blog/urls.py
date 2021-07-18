@@ -10,4 +10,5 @@ urlpatterns = [
     path('news/', views.subs_news_list, name='news_list'),
     path('successtodelete/<str:username>/', views.delete_user, name='delete_user'),
     path('home/', views.home, name='home'),
+    path('alreadyread/<int:post_id>', views.already_read, name='already_read'),
 ]

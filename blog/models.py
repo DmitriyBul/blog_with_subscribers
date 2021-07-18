@@ -21,3 +21,8 @@ class UserFollowing(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='following_posts', verbose_name='Пользователь',
                              on_delete=models.CASCADE)
     following = models.ForeignKey(User, related_name='followed_by', on_delete=models.CASCADE)
+
+class AlreadyRead(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_read', verbose_name='Пользователь',
+                             on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='read_id', on_delete=models.CASCADE)
