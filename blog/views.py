@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
+from blog.forms import PostCreationForm
 from blog.models import Post, UserFollowing, AlreadyRead
+from django.core.mail import send_mail
 
 
 def home(request):
@@ -66,3 +68,36 @@ def already_read(request, post_id):
     posts = Post.objects.filter(user__in=lst_of_ids).exclude(id__in=lst_of_ar).order_by('-date')
     return render(request, 'blog/news.html',
                   {'posts': posts})
+
+
+@login_required
+def post_create(request):
+    user = request.user
+    qs = UserFollowing.objects.filter(user=request.user).values_list('following', flat=True)
+    lst_of_ids = list(qs)
+    if request.method == 'POST':
+        # Форма отправлена.
+        form = PostCreationForm(request.POST, user=request.user)
+        if form.is_valid():
+            # Данные формы валидны.
+            # img = form.cleaned_data.get("image")
+            cd = form.cleaned_data
+            new_item = form.save(commit=False)
+            new_item.user = request.user
+            # Добавляем пользователя к созданному объекту.
+            new_item.save()
+            mail_host = "localhost"
+            user_list = User.objects.all()
+            recipients = []
+            for user in user_list:
+                recipients.append(user.email)
+            message = 'У пользователя {0} в блоге появилась новая запись!'.format(user)
+            subject = 'Новый пост'
+            send_mail(subject, message, mail_host, recipients, fail_silently=False)
+            return redirect("/home/")
+    else:
+        # Заполняем форму данными из GET-запроса.
+        form = PostCreationForm(user=request.user)
+    return render(request,
+                  'blog/create.html',
+                  {'form': form})
