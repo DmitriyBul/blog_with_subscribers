@@ -73,7 +73,7 @@ def already_read(request, post_id):
 @login_required
 def post_create(request):
     user = request.user
-    qs = UserFollowing.objects.filter(user=request.user).values_list('following', flat=True)
+    qs = UserFollowing.objects.filter(following=request.user).values_list('user', flat=True)
     lst_of_ids = list(qs)
     if request.method == 'POST':
         # Форма отправлена.
@@ -87,7 +87,7 @@ def post_create(request):
             # Добавляем пользователя к созданному объекту.
             new_item.save()
             mail_host = "localhost"
-            user_list = User.objects.all()
+            user_list = User.objects.filter(id__in=lst_of_ids)
             recipients = []
             for user in user_list:
                 recipients.append(user.email)
